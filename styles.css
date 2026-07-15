@@ -175,7 +175,7 @@ html, body, #app {
   color: #111;
 }
 .dia-cell.hoy .dia-semana {
-  color: var(--accent);
+  color: var(--dia-activo);
 }
 .dia-cell.hoy.active .dia-semana {
   color: rgba(17,17,17,0.7);
