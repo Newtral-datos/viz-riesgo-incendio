@@ -1,0 +1,365 @@
+:root {
+  --accent:     #ef8504;
+  --accent2:    #f9fb2f;
+  --dia-activo: #01f3b3;
+  --bg:         #0f1117;
+  --surface:    #161b26;
+  --border:     rgba(239, 133, 4, 0.2);
+  --text:       #f9fafb;
+  --muted:      #6b7280;
+}
+
+* { box-sizing: border-box; }
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, Noto Sans;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+#ui {
+  flex: 0 0 auto;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+#map { flex: 1; min-height: 0; }
+
+.ui-inner {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.ui-left  { display: flex; justify-content: flex-start; align-items: center; }
+.ui-right { display: flex; align-items: center; gap: 16px; }
+
+/* Título */
+.map-title-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.map-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.map-subtitle {
+  margin: 2px 0 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Leyenda */
+.leyenda {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.leyenda-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+.leyenda-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.hidden { display: none !important; }
+
+/* ── Calendario de días (centrado, bajo la cabecera) ── */
+#dia-calendario {
+  position: fixed;
+  top: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 8px;
+  max-width: calc(100vw - 32px);
+  overflow-x: auto;
+}
+
+.calendario-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 46px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.calendario-reset:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.1);
+}
+
+.calendario-dias {
+  display: flex;
+  gap: 4px;
+}
+
+.dia-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 54px;
+  height: 46px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: background 0.12s, border-color 0.12s;
+}
+.dia-cell:hover {
+  background: rgba(255,255,255,0.1);
+}
+.dia-cell.active {
+  background: var(--dia-activo);
+  border-color: var(--dia-activo);
+}
+.dia-cell .dia-semana {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+}
+.dia-cell.active .dia-semana {
+  color: rgba(17,17,17,0.7);
+}
+.dia-cell .dia-num {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.dia-cell.active .dia-num {
+  color: #111;
+}
+.dia-cell.hoy .dia-semana {
+  color: var(--accent);
+}
+.dia-cell.hoy.active .dia-semana {
+  color: rgba(17,17,17,0.7);
+}
+
+/* ── Popup ── */
+.maplibregl-popup {
+  font: 13px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, Noto Sans;
+}
+.maplibregl-popup-content {
+  padding: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 24px rgba(239,133,4,0.06);
+  min-width: 190px;
+  max-width: 260px;
+}
+.maplibregl-popup-close-button {
+  color: var(--muted);
+  font-size: 16px;
+  padding: 6px 10px;
+}
+.maplibregl-popup-close-button:hover { color: var(--accent); background: transparent; }
+
+.pp-top-bar {
+  height: 3px;
+}
+.pp-inner {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pp-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.pp-nombre {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.pp-centrado {
+  text-align: center;
+  font-size: 16px;
+}
+.pp-provincia {
+  margin: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.pp-dato-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.pp-dato-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.pp-dato-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: right;
+}
+
+/* ── Tooltip hover ── */
+.map-tooltip {
+  position: fixed;
+  z-index: 200;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, Noto Sans;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(239,133,4,0.3);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.map-tooltip.visible { opacity: 1; }
+
+/* ── Geocoder ── */
+.geocoder-ctrl {
+  position: relative;
+  width: 240px;
+}
+.geocoder-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+.geocoder-input:focus {
+  box-shadow: 0 0 0 2px rgba(239,133,4,0.4);
+}
+.geocoder-input::placeholder { color: #9ca3af; }
+.geocoder-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  z-index: 10;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.geocoder-item {
+  padding: 9px 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  color: #111;
+  border-bottom: 1px solid #f3f4f6;
+}
+.geocoder-item:last-child { border-bottom: none; }
+.geocoder-item:hover { background: #fff5f0; }
+.geocoder-empty { color: #9ca3af; cursor: default; }
+.geocoder-empty:hover { background: none; }
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .ui-inner {
+    grid-template-columns: 1fr;
+    padding: 8px 14px;
+    row-gap: 6px;
+  }
+  .ui-left { justify-content: center; }
+  .map-title-block { justify-content: center; }
+  .map-title { font-size: 13px; }
+  .map-subtitle { display: none; }
+
+  .ui-right { gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .leyenda { gap: 6px; justify-content: center; }
+  .leyenda-item { font-size: 9px; gap: 4px; }
+  .leyenda-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+  .geocoder-ctrl { width: 130px; }
+  .geocoder-input { font-size: 11px; padding: 5px 8px; }
+  .geocoder-results { font-size: 11px; }
+
+  .maplibregl-ctrl-top-right { transform: scale(0.85); transform-origin: top right; }
+  .maplibregl-ctrl-scale { font-size: 9px; }
+
+  #dia-calendario {
+    top: auto;
+    bottom: 50px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    max-width: none;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 6px;
+  }
+  .calendario-dias { gap: 3px; }
+  .calendario-reset { width: 28px; height: 36px; }
+  .dia-cell { width: 38px; height: 36px; gap: 1px; }
+  .dia-cell .dia-semana { font-size: 8px; }
+  .dia-cell .dia-num { font-size: 13px; }
+}
